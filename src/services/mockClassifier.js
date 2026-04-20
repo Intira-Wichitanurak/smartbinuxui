@@ -1,4 +1,23 @@
 const API_URL = import.meta.env.VITE_CLASSIFIER_API_URL || "http://localhost:8000/classify";
+const DEFAULT_PI_MODEL_PATH = "/home/intira/garbage-bin/garbage_mobilenetv2_fp16v3.tflite";
+const ENV_MODEL_PATH = import.meta.env.VITE_CLASSIFIER_MODEL_PATH || "";
+
+function resolveModelPath(options = {}) {
+  if (options.modelPath) {
+    return options.modelPath;
+  }
+
+  if (ENV_MODEL_PATH) {
+    return ENV_MODEL_PATH;
+  }
+
+  // On Raspberry Pi kiosk, prefer the provided local model path by default.
+  if (window?.electronAPI?.isElectron && window?.electronAPI?.platform === "linux") {
+    return DEFAULT_PI_MODEL_PATH;
+  }
+
+  return "";
+}
 
 function normalizeType(value) {
   const mapped = String(value || "").toLowerCase().trim();
@@ -45,6 +64,11 @@ export async function classifyWaste(imageBlob, options = {}) {
 
     const formData = new FormData();
     formData.append("image", imageBlob, "capture.jpg");
+
+    const modelPath = resolveModelPath(options);
+    if (modelPath) {
+      formData.append("model_path", modelPath);
+    }
 
     const response = await fetch(API_URL, {
       method: "POST",
