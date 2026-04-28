@@ -12,6 +12,7 @@ export function useWasteFlow() {
   const [result, setResult] = useState(null);
   const [cycleCount, setCycleCount] = useState(1);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isAutoFlowEnabled, setIsAutoFlowEnabled] = useState(false);
   const [cameraError, setCameraError] = useState("");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -71,6 +72,11 @@ export function useWasteFlow() {
     let probing = false;
 
     async function runStatusFlow() {
+      if (!isAutoFlowEnabled) {
+        stopCamera();
+        return;
+      }
+
       if (status === STATUS.READY) {
         setResult(null);
         frameBlobRef.current = null;
@@ -207,7 +213,7 @@ export function useWasteFlow() {
         stopCamera();
       }
     };
-  }, [captureFrameBlob, startCamera, status, stopCamera]);
+  }, [captureFrameBlob, isAutoFlowEnabled, startCamera, status, stopCamera]);
 
   useEffect(() => {
     return () => {
@@ -242,9 +248,11 @@ export function useWasteFlow() {
     cycleCount,
     videoRef,
     isAnalyzing,
+    isAutoFlowEnabled,
     cameraError,
     forceStatus,
     forceAnalyze,
     goToResultFromModel,
+    setIsAutoFlowEnabled,
   };
 }

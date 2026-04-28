@@ -1,0 +1,7 @@
+Put your real trash-bin image here as:
+
+public/bins.png
+
+Recommended: transparent PNG with all bins in one row.
+The READY screen will use this image automatically.
+If the file is missing, the app falls back to built-in CSS bins.

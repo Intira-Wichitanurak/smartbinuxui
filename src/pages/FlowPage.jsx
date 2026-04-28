@@ -17,64 +17,78 @@ const CONTENT = {
     number: 2,
   },
   [STATUS.ANALYZING]: {
-    title: "ฮิปโปน้อยกำลังคิด",
+    title: "กำลังวิเคราะห์ประเภทขยะ",
     subtitle: "ขอเวลานิดนึงนะ ฮิปโปน้อยกำลังดูว่าเป็นขยะประเภทไหน",
     badge: "กำลังประมวลผล",
     mood: "think",
     number: 3,
   },
   [STATUS.RECYCLABLE]: {
-    title: "เย้ เจอขยะรีไซเคิล",
-    subtitle: "เก่งมากเลยจ้า เอาไปใส่ถังรีไซเคิลให้กลับมาใช้ใหม่ได้",
-    badge: "ประเภทที่ 1",
+    title: "ขยะรีไซเคิล (RECYCLE)",
+    subtitle: "",
+    badge: "",
     mood: "happy",
-    number: 5,
-    stickerType: "recyclable",
+    number: 4,
+    heroVariant: "recyclable",
+    heroImageSetKey: "recyclable",
+    quoteText: "\"ดีเยี่ยม ของแบบนี้ต้องไป\nถังรีไซเคิล\nดู! ได้กลับมาใช้ใหม่ได้อีก\"",
   },
   [STATUS.HAZARDOUS]: {
-    title: "อุ๊ย เจอขยะอันตราย",
-    subtitle: "ฮิปโปน้อยขอเตือน แยกทิ้งในจุดรับขยะอันตรายนะ ปลอดภัยที่สุด",
-    badge: "ประเภทที่ 2",
+    title: "ขยะอันตราย (HAZARDOUS)",
+    subtitle: "",
+    badge: "",
     mood: "alert",
-    number: 6,
-    stickerType: "hazardous",
+    number: 5,
+    heroVariant: "hazardous",
+    heroImageSetKey: "hazardous",
+    quoteText: "\"น่ารักมาก แยกถูกแล้ว ของอันตรายต้องระวังและใส่ถังสีแดง\"",
   },
   [STATUS.ORGANIC]: {
-    title: "เจอขยะสดจ้า",
-    subtitle: "สุดยอดเลย นี่คือขยะสด เอาไปทำปุ๋ยหมักต่อได้",
-    badge: "ประเภทที่ 3",
+    title: "ขยะเปียก (ORGANIC)",
+    subtitle: "",
+    badge: "",
     mood: "happy",
-    number: 7,
-    stickerType: "organic",
+    number: 6,
+    heroVariant: "organic",
+    heroImageSetKey: "organic",
+    quoteText: "\"เก่งมากเลย ของชิ้นนี้ย่อยสลายได้ ใส่ถังสีเขียวเลย\"",
   },
   [STATUS.GENERAL]: {
-    title: "เจอขยะทั่วไป",
-    subtitle: "ทิ้งลงถังขยะทั่วไปได้เลย แล้วอย่าปนกับรีไซเคิลนะ",
-    badge: "ประเภทที่ 4",
+    title: "ขยะทั่วไป (GENERAL)",
+    subtitle: "",
+    badge: "",
     mood: "normal",
-    number: 8,
-    stickerType: "general",
+    number: 7,
+    heroVariant: "general",
+    heroImageSetKey: "general",
+    quoteText: "\"เก่งจัง ของชิ้นนี้รีไซเคิลไม่ได้ \nไปอยู่ถังสีน้ำเงินนะ\"",
   },
   [STATUS.FOOD_RESIDUE]: {
-    title: "ฮิปโปน้อยเจอเศษอาหาร",
-    subtitle: "ล้างก่อนทิ้งนิดนึงนะ จะช่วยให้คัดแยกได้ง่ายขึ้น",
-    badge: "ตรวจพบเศษอาหาร",
-    mood: "think",
-    number: 9,
+    title: "กรุณานำเศษอาหารเท\nลงถังขยะบางๆก่อนน้า\n!!!",
+    subtitle: "",
+    badge: "",
+    mood: "alert",
+    number: 8,
+    heroVariant: "unknown",
+    heroImageSetKey: "unknown",
   },
   [STATUS.UNKNOWN]: {
-    title: "ฮิปโปน้อยยังไม่แน่ใจ",
-    subtitle: "ไม่เป็นไรจ้า ลองถ่ายใหม่อีกครั้ง เดี๋ยวเราช่วยกันดู",
-    badge: "ต้องลองใหม่",
+    title: "ลองถ่ายใหม่อีกครั้งน๊า\nคราวนี้น่าทำได้นะๆ",
+    subtitle: "",
+    badge: "",
     mood: "sad",
-    number: 10,
+    number: 9,
+    heroVariant: "retry",
+    heroImageSetKey: "retry",
   },
   [STATUS.THANK_YOU]: {
-    title: "ขอบคุณจากฮิปโปน้อย",
-    subtitle: "ขอบคุณที่ช่วยกันแยกขยะนะ เด็กเก่งรักษ์โลกสุดๆ",
-    badge: "พร้อมเล่นรอบใหม่",
+    title: "ขอบคุณที่มาช่วยกัน\nคัดแยกขยะกับฉันนะ",
+    subtitle: "",
+    badge: "",
     mood: "celebrate",
-    number: 11,
+    number: 10,
+    heroVariant: "thankyou",
+    heroImageSetKey: "thankyou",
   },
 };
 
@@ -85,7 +99,7 @@ export default function FlowPage({
   videoRef,
   cameraError,
 }) {
-  const content = CONTENT[status];
+  const content = CONTENT[status] ?? CONTENT[STATUS.UNKNOWN];
 
   return (
     <>
@@ -100,6 +114,10 @@ export default function FlowPage({
         videoRef={videoRef}
         showVideo={status === STATUS.CAPTURING}
         stickerType={content.stickerType}
+        heroVariant={content.heroVariant}
+        heroImageSetKey={content.heroImageSetKey}
+        quoteText={content.quoteText}
+        hideNarration={status === STATUS.UNKNOWN}
       />
 
       {cameraError ? (

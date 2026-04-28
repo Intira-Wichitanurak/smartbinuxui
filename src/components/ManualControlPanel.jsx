@@ -18,9 +18,11 @@ const RESULT_STATES = [
 ];
 export default function ManualControlPanel({
   currentStatus,
+  isAutoFlowEnabled,
   onSetStatus,
   onAnalyze,
   onResultFromModel,
+  onAutoFlowToggle,
   isAnalyzing,
   hasResult,
   audioSettings,
@@ -47,6 +49,20 @@ export default function ManualControlPanel({
         <p className="text-sm text-emerald-800">
           โหมดพิเศษของฮิปโปน้อย กดเปลี่ยนสถานะเองได้เลย เหมาะกับเดโมและทดลองเล่น
         </p>
+
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => onAutoFlowToggle(!isAutoFlowEnabled)}
+            className={`rounded-xl border px-3 py-2 text-sm font-semibold transition ${
+              isAutoFlowEnabled
+                ? "border-rose-600 bg-rose-600 text-white hover:bg-rose-700"
+                : "border-emerald-700 bg-emerald-700 text-white hover:bg-emerald-800"
+            }`}
+          >
+            {isAutoFlowEnabled ? "หยุดเล่นอัตโนมัติ" : "เปิดเล่นอัตโนมัติ"}
+          </button>
+        </div>
 
         <div className="mt-3 space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3">
           <label className="block text-xs font-bold text-emerald-900">

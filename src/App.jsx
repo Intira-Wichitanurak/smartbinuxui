@@ -49,9 +49,11 @@ function App() {
     videoRef,
     cameraError,
     isAnalyzing,
+    isAutoFlowEnabled,
     forceStatus,
     forceAnalyze,
     goToResultFromModel,
+    setIsAutoFlowEnabled,
   } = useWasteFlow();
   const { narrationText } = useNarration(status, audioSettings);
   useStatusSfx(status, audioSettings.sfxVolume);
@@ -95,9 +97,11 @@ function App() {
 
       <ManualControlPanel
         currentStatus={status}
+        isAutoFlowEnabled={isAutoFlowEnabled}
         onSetStatus={forceStatus}
         onAnalyze={forceAnalyze}
         onResultFromModel={goToResultFromModel}
+        onAutoFlowToggle={setIsAutoFlowEnabled}
         isAnalyzing={isAnalyzing}
         hasResult={Boolean(result)}
         audioSettings={audioSettings}
